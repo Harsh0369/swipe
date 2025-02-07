@@ -10,16 +10,16 @@ export const signup = async (req, res) => {
 
   try {
     if (!name || !email || !password || !age || !gender || !genderPreference) {
-      res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     if (age < 18) {
-      res
+      return res
         .status(400)
         .json({ message: "You must be 18 years or older to use this app" });
     }
     if (password.length < 6) {
-      res
+      return res
         .status(400)
         .json({ message: "Password must be at least 6 characters long" });
     }
@@ -51,11 +51,11 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         if (!email || !password) {
-          res.status(400).json({ message: "All fields are required" });
+          return res.status(400).json({ message: "All fields are required" });
         }
         const user = await User.findOne({ email }).select("+password");
         if(!user || !(await user.matchPassword(password))) {
-            res.status(401).json({ message: "Invalid credentials" });
+            return res.status(401).json({ message: "Invalid credentials" });
         }
         const token = signToken(user._id);
 

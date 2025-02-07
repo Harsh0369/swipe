@@ -12,15 +12,15 @@ export const updateProfile = async (req, res) => {
                 try {
                     const uploadResponse = await cloudinary.uploader.upload(image);
                     updatedData.image = uploadResponse.secure_url;
-                } catch {
-                    console.log("Error uploading image");
-                    res.status(500).json({ message: "Error uploading image" });
+                } catch(error) {
+                    console.log("Error uploading image", error);
+                    return res.status(500).json({ message: "Error uploading image" });
                 }
             }
              const updatedUser = await User.findByIdAndUpdate(req.user._id, updatedData, { new: true });
         }
-    } catch {
-        console.log("Error updating profile");
-        res.status(500).json({ message: "Error updating profile" });
+    } catch(error) {
+        console.log("Error updating profile",error);
+        return res.status(500).json({ message: "Error updating profile" });
     }
 }
