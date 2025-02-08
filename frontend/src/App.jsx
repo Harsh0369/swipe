@@ -1,9 +1,41 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import { useAuthStore } from "./store/useAuthStore";
+
+import HomePage from "./pages/HomePage";
+import AuthPage from "./pages/AuthPage";
+import ProfilePage from "./pages/ProfilePage";
+import ChatPage from "./pages/ChatPage";
+
 
 const App = () => {
+  const { checkAuth } = useAuthStore();
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
   return (
-    <div className='bg-zinc-800 h-screen'>App</div>
-  )
-}
+    <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+      <Routes>
+        <Route
+          path="/"
+          element={authUser ? <HomePage /> : <Navigate to={"/auth"} />}
+        />
+        <Route
+          path="/auth"
+          element={!authUser ? <AuthPage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/profile"
+          element={authUser ? <ProfilePage /> : <Navigate to={"/auth"} />}
+        />
+        <Route
+          path="/chat/:id"
+          element={authUser ? <ChatPage /> : <Navigate to={"/auth"} />}
+        />
+      </Routes>
+    </div>
+  );
+};
 
-export default App
+export default App;
